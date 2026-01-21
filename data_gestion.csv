@@ -1,0 +1,10 @@
+herramienta,periodo,indicador,valor_actual,meta,unidad
+BSC,Anual,EBITDA,18,20,%
+BSC,Anual,Ingresos Totales,240500,250000,€
+BSC,Anual,Ocupación Media,68,70,%
+OKR,Trimestral,Alumnos Activos Escuela,210,250,pax
+OKR,Trimestral,Tasa de Churn Escuela,4.2,5,%
+OKR,Trimestral,Torneos Organizados,1,2,uds
+PIRAMIDE,Mensual,Limpieza Cristales,95,100,%
+PIRAMIDE,Mensual,Tiempo Respuesta Incidencias,45,60,min
+PIRAMIDE,Mensual,Temperatura Nave,21,22,ºC
