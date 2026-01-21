@@ -3,10 +3,29 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
+# 1. Configuración de página y estilos (DEBE IR PRIMERO)
+st.set_page_config(page_title="Avanza Pádel Hub", layout="wide")
+
+# 2. Definición de las pestañas (ESTA ES LA LÍNEA QUE TE FALTA ARRIBA)
+# Primero creamos las pestañas y las asignamos a variables
+tab_bsc, tab_okr, tab_piramide = st.tabs(["ESTRATEGIA (BSC)", "ESCUELA (OKR)", "OPERACIONES (PIRÁMIDE)"])
+
+# 3. Ahora ya podemos usar las variables en los bloques 'with'
+with tab_bsc:
+    st.subheader("Cuadro de Mando Integral - Visión de Negocio")
+    # ... resto de tu código para el simulador y métricas ...
+    
+with tab_okr:
+    st.subheader("Objetivos y Resultados Clave - Escuela")
+    # ... tu código de OKRs ...
+
+with tab_piramide:
+    st.subheader("Pirámide de Rendimiento - Operaciones")
+    # ... tu código de la pirámide ...
 # Configuración de la página
 st.set_page_config(page_title="Avanza Pádel Hub", layout="wide")
 
-st.title("🎾 Avanza Pádel: Sistema de Gestión Integrado")
+st.title("Avanza Pádel: Sistema de Gestión Integrado")
 st.sidebar.header("Filtros de Control")
 periodo = st.sidebar.selectbox("Seleccionar Período", ["Enero 2025", "Q1 2025", "Anual 2025"])
 
