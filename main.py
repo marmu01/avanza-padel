@@ -2,50 +2,33 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# Configuración
-st.set_page_config(page_title="Avanza Pádel Hub", layout="wide")
+# ... (Mantener el resto de la configuración anterior) ...
 
-# Carga de datos (Simulando la base de datos del cliente)
-@st.cache_data
-def load_data():
-    return pd.read_csv("data_gestion.csv")
+with tab_bsc:
+    st.subheader("Simulador de Ingresos Dinámicos (Yield Management)")
+    st.info("💡 **Ayuda:** Utilice este simulador para ver el impacto de subir el precio en horas punta (18:00 - 22:00) donde la ocupación es del 95% o superior.")
 
-df = load_data()
+    col_sim1, col_sim2 = st.columns([1, 2])
 
-st.title("🎾 Avanza Pádel: Centro de Control de Gestión")
-st.markdown("---")
+    with col_sim1:
+        incremento = st.number_input("Incremento de tarifa por hora (€)", min_value=0.0, max_value=10.0, value=2.0, step=0.5)
+        horas_punta_dia = st.slider("Horas punta al día con >95% ocupación", 1, 6, 4)
+        pistas_afectadas = 10 # Número total de pistas en Avanza Pádel
+        
+        # Cálculo: Incremento * Horas * Pistas * 30 días
+        ingreso_extra_mensual = incremento * horas_punta_dia * pistas_afectadas * 30
+        
+        st.metric("Ingreso Extra Estimado", f"{ingreso_extra_mensual:,.0f} € / mes", delta="Impacto en EBITDA")
+        st.write(f"Estimación basada en {pistas_afectadas} pistas operativas.")
 
-# --- TABS PARA LAS TRES HERRAMIENTAS ---
-tab1, tab2, tab3 = st.tabs(["📊 Estrategia (BSC)", "🎯 Táctica (OKR)", "🔺 Calidad (Pirámide)"])
+    with col_sim2:
+        # Gráfico comparativo
+        data_sim = pd.DataFrame({
+            'Escenario': ['Ingreso Actual', 'Con Tarifa Dinámica'],
+            'Euros (€)': [48500, 48500 + ingreso_extra_mensual]
+        })
+        fig_sim = px.bar(data_sim, x='Escenario', y='Euros (€)', 
+                         color='Escenario', color_discrete_map={'Ingreso Actual': '#333', 'Con Tarifa Dinámica': '#CCFF00'})
+        st.plotly_chart(fig_sim, use_container_width=True)
 
-# 1. BALANCED SCORECARD (Visión Grupo Recio)
-with tab1:
-    st.header("Balanced Scorecard - Seguimiento Anual")
-    bsc_data = df[df['herramienta'] == 'BSC']
-    cols = st.columns(len(bsc_data))
-    for i, row in bsc_data.iterrows():
-        delta = row['valor_actual'] - row['meta']
-        cols[i % len(bsc_data)].metric(
-            label=row['indicador'],
-            value=f"{row['valor_actual']} {row['unidad']}",
-            delta=f"{delta} {row['unidad']}"
-        )
-    
-    fig = px.bar(bsc_data, x="indicador", y="valor_actual", color="indicador", title="Cumplimiento de Objetivos Anuales")
-    st.plotly_chart(fig, use_container_width=True)
-
-# 2. OKRs (Gestión de la Escuela)
-with tab2:
-    st.header("OKRs Trimestrales - Foco: Escuela y Comunidad")
-    okr_data = df[df['herramienta'] == 'OKR']
-    for _, row in okr_data.iterrows():
-        progreso = min(row['valor_actual'] / row['meta'], 1.0)
-        st.write(f"**{row['indicador']}** ({row['valor_actual']} / {row['meta']} {row['unidad']})")
-        st.progress(progreso)
-
-# 3. PIRÁMIDE DE RENDIMIENTO (Operaciones Diarias)
-with tab3:
-    st.header("Pirámide de Rendimiento - Estándares de Calidad")
-    pir_data = df[df['herramienta'] == 'PIRAMIDE']
-    st.table(pir_data[['indicador', 'valor_actual', 'meta', 'unidad']])
-    st.info("💡 Estos datos deben ser validados semanalmente por el gestor de pista.")
+    st.success(f"Proyección: Si aplicas este cambio, el margen operativo subiría aproximadamente un {round((ingreso_extra_mensual/48500)*100, 1)}% mensual.")
