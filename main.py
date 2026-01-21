@@ -166,3 +166,70 @@ with tab_piramide:
 
 st.markdown("---")
 st.caption("Propiedad de Grupo Recio - Sistema de Gestión Avanzada v2.0")
+import streamlit as st
+import pandas as pd
+
+# 1. CONFIGURACIÓN Y ESTILO AVANZA PÁDEL
+st.set_page_config(page_title="Avanza Pádel Hub", layout="wide")
+
+st.markdown("""
+    <style>
+    .main { background-color: #0E1117; }
+    [data-testid="stMetricValue"] { color: #CCFF00; font-size: 32px; }
+    .status-box { padding: 25px; border-radius: 15px; text-align: center; margin-bottom: 25px; font-weight: bold; font-size: 20px; }
+    .stProgress > div > div > div > div { background-color: #CCFF00; }
+    </style>
+    """, unsafe_allow_html=True)
+
+# 2. LOGICA DEL SEMÁFORO DE SALUD (ALGORITMO)
+def calcular_salud_global():
+    # Simulamos pesos de negocio (Cifras reales vendrían del cliente)
+    cumplimiento_bsc = 0.85   # 85% metas financieras
+    cumplimiento_okr = 0.70   # 70% metas de escuela
+    cumplimiento_pir = 0.95   # 95% calidad operativa
+    
+    # Media ponderada
+    score = (cumplimiento_bsc * 0.50) + (cumplimiento_okr * 0.30) + (cumplimiento_pir * 0.20)
+    
+    if score >= 0.85: return "🟢 EXCELENTE", "#1B5E20", "El negocio está en zona de crecimiento. Operaciones y finanzas alineadas."
+    elif score >= 0.70: return "🟡 PRECAUCIÓN", "#FBC02D", "Desviación detectada en Escuela. Riesgo de estancamiento en ingresos recurrentes."
+    else: return "🔴 ALERTA CRÍTICA", "#B71C1C", "Intervención inmediata requerida. Los márgenes operativos están en riesgo."
+
+status_label, status_color, status_msg = calcular_salud_global()
+
+# 3. INTERFAZ SUPERIOR
+st.title("AVANZA PÁDEL | Centro de Control")
+st.markdown(f'<div class="status-box" style="background-color: {status_color}; color: white;">ESTADO GLOBAL: {status_label}<br><span style="font-size: 14px; font-weight: normal;">{status_msg}</span></div>', unsafe_allow_html=True)
+
+periodo = st.select_slider("Línea de tiempo de análisis:", options=["Semanal", "Mensual", "Trimestral", "Anual"], value="Mensual")
+
+# 4. DISTRIBUCIÓN DE MÉTRICAS CLAVE
+st.markdown("### Indicadores Maestros")
+c1, c2, c3, c4 = st.columns(4)
+c1.metric("Ocupación", "72%", "+4%")
+c2.metric("NPS Cliente", "8.2", "0.5")
+c3.metric("Margen Escuela", "34%", "-2%")
+c4.metric("Consumo Energ.", "1.2k€", "-150€")
+
+st.divider()
+
+# 5. PESTAÑAS DEL MODELO HÍBRIDO
+tab_bsc, tab_okr, tab_pir = st.tabs(["ESTRATEGIA (BSC)", "CRECIMIENTO (OKR)", "CALIDAD (PIRÁMIDE)"])
+
+with tab_bsc:
+    st.info("**Objetivo:** Supervisión del ROI para Grupo Recio.")
+    # (Aquí irían los gráficos de ingresos/gastos anuales)
+    st.write("Visualización de Flujo de Caja y EBITDA consolidado.")
+
+with tab_okr:
+    st.info("**Objetivo:** Rendimiento de monitores y fidelización de alumnos.")
+    st.write("**Progreso KR: Alumnos Nivel 3.0+**")
+    st.progress(0.65)
+    st.write("**Progreso KR: Retención Mensual**")
+    st.progress(0.92)
+
+with tab_pir:
+    st.info("**Objetivo:** Mantenimiento de los activos físicos y experiencia en pista.")
+    st.write("Checklist de Calidad: Pistas 1-10")
+    st.success("✅ Cristales e Iluminación: Estado Óptimo")
+    st.warning("⚠️ Climatización Nave B: Revisión programada en 48h")
