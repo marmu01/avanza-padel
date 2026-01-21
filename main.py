@@ -283,7 +283,23 @@ with col_right:
     st.subheader("Radar de Competencia")
     st.info("Oportunidades vs. Clubes vecinos")
     
-    # Comparativa de disponibilidad en Playtomic (Centros cercanos)
+   # 1. Definición de los datos (Asegúrate de que los nombres no tengan espacios extra)
+competencia = pd.DataFrame({
+    'Centro': ['Avanza Pádel', 'Club Alcalá B', 'Centro Entrenúcleos'],
+    'Pistas_Libres': [2, 0, 5],
+    'Precio': [24, 28, 22],  # Cambiamos "Precio Medio" por "Precio"
+    'Rating': [4.8, 4.2, 4.5]
+})
+# 2. El bucle donde se muestran los datos (Debe llamar a 'Precio')
+for _, row in competencia.iterrows():
+    st.write(f"**{row['Centro']}**")
+    # USAMOS 'Precio' aquí para que coincida con la definición de arriba
+    st.caption(f"Rating: {row['Rating']} ⭐ | Precio: {row['Precio']}€") 
+    
+    if row['Pistas_Libres'] == 0:
+        st.error("Lleno Total (Oportunidad)")
+    else:
+        st.success(f"{row['Pistas_Libres']} pistas disponibles") # Comparativa de disponibilidad en Playtomic (Centros cercanos)
     competencia = pd.DataFrame({
         'Centro': ['Avanza Pádel', 'Club Alcalá B', 'Centro Entrenúcleos'],
         'Pistas Libres (Hoy)': [2, 0, 5],
