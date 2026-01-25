@@ -123,47 +123,38 @@ with col_left:
 with tab_piramide:
     st.header("Inteligencia de Competencia (Playtomic)")
     
-    # DEFINICIÓN DE DATOS: Asegúrate de que los nombres coincidan
-    competencia = pd.DataFrame({
+    # 1. Definición limpia del DataFrame
+    data_competencia = {
         'Centro': ['Avanza Pádel', 'Club Rival A', 'Centro Rival B'],
         'Pistas_Libres': [2, 0, 5],
-        'Precio': [24, 28, 22],  # Hemos simplificado a "Precio"
+        'Precio': [24, 28, 22],
         'Rating': [4.8, 4.2, 4.5]
-    })
-    cols = st.columns(3)
-    for i, row in competencia.iterrows():
-        with cols[i]:
+    }
+    competencia = pd.DataFrame(data_competencia)
+    
+    # 2. SEGURO: Eliminamos espacios invisibles en los nombres de las columnas
+    competencia.columns = competencia.columns.str.strip()
+    
+    # 3. Visualización en columnas
+    cols_comp = st.columns(3)
+    
+    # Usamos enumerate para asegurar que no hay fallos de índice
+    for i, (index, row) in enumerate(competencia.iterrows()):
+        with cols_comp[i]:
             st.subheader(row['Centro'])
-            # CORRECCIÓN AQUÍ: Usamos row['Precio'] y row['Rating']
-            st.write(f"Rating: {row['Rating']} ⭐")
-            st.write(f"Precio: {row['Precio']} €") 
             
-            if row['Pistas_Libres'] == 0:
-                st.error("LLENO TOTAL")
+            # Usamos una sintaxis más segura para acceder a las columnas
+            rating_val = row.get('Rating', 'N/A')
+            precio_val = row.get('Precio', 0)
+            pistas_val = row.get('Pistas_Libres', 0)
+            
+            st.write(f"Valoración: {rating_val} ⭐")
+            st.write(f"Tarifa: {precio_val} €")
+            
+            if pistas_val == 0:
+                st.error("SIN DISPONIBILIDAD")
             else:
-                st.success(f"{row['Pistas_Libres']} pistas disponibles")
-# 2. El bucle donde se muestran los datos (Debe llamar a 'Precio')
-for _, row in competencia.iterrows():
-    st.write(f"**{row['Centro']}**")
-    # USAMOS 'Precio' aquí para que coincida con la definición de arriba
-    st.caption(f"Rating: {row['Rating']} ⭐ | Precio: {row['Precio']}€") 
-    if row['Pistas_Libres'] == 0:
-        st.error("Lleno Total (Oportunidad)")
-    else:
-        st.success(f"{row['Pistas_Libres']} pistas disponibles") # Comparativa de disponibilidad en Playtomic (Centros cercanos)
-    competencia = pd.DataFrame({
-        'Centro': ['Avanza Pádel', 'Club Alcalá B', 'Centro Entrenúcleos'],
-        'Pistas Libres (Hoy)': [2, 0, 5],
-        'Precio (€)': [24, 28, 22],
-        'Rating': [4.8, 4.2, 4.5]
-    })  
-    for _, row in competencia.iterrows():
-        st.write(f"**{row['Centro']}**")
-        st.caption(f"Rating: {row['Rating']} ⭐ | Precio: {row['Precio']}€")
-        if row['Pistas Libres (Hoy)'] == 0:
-            st.error("Lleno Total (Oportunidad perdida)")
-        else:
-            st.success(f"{row['Pistas Libres (Hoy)']} pistas disponibles")
+                st.success(f"{pistas_val} pistas libres")
 # 7. VISIÓN DE OPORTUNIDADES
 with st.expander("🔍 Ver Análisis de Oportunidades 'Last Minute'"):
     st.write("""
