@@ -120,17 +120,28 @@ with col_left:
                          color_discrete_sequence=['#CCFF00'], template="plotly_dark")
     fig_hourly.update_layout(yaxis_range=[0, 100])
     st.plotly_chart(fig_hourly, use_container_width=True)
-with col_right:
-    st.subheader("Radar de Competencia")
-    st.info("Oportunidades vs. Clubes vecinos")
+with tab_piramide:
+    st.header("Inteligencia de Competencia (Playtomic)")
     
-   # 1. Definición de los datos (Asegúrate de que los nombres no tengan espacios extra)
-competencia = pd.DataFrame({
-    'Centro': ['Avanza Pádel', 'Club Alcalá B', 'Centro Entrenúcleos'],
-    'Pistas_Libres': [2, 0, 5],
-    'Precio': [24, 28, 22],  # Cambiamos "Precio Medio" por "Precio"
-    'Rating': [4.8, 4.2, 4.5]
-})
+    # DEFINICIÓN DE DATOS: Asegúrate de que los nombres coincidan
+    competencia = pd.DataFrame({
+        'Centro': ['Avanza Pádel', 'Club Rival A', 'Centro Rival B'],
+        'Pistas_Libres': [2, 0, 5],
+        'Precio': [24, 28, 22],  # Hemos simplificado a "Precio"
+        'Rating': [4.8, 4.2, 4.5]
+    })
+    cols = st.columns(3)
+    for i, row in competencia.iterrows():
+        with cols[i]:
+            st.subheader(row['Centro'])
+            # CORRECCIÓN AQUÍ: Usamos row['Precio'] y row['Rating']
+            st.write(f"Rating: {row['Rating']} ⭐")
+            st.write(f"Precio: {row['Precio']} €") 
+            
+            if row['Pistas_Libres'] == 0:
+                st.error("LLENO TOTAL")
+            else:
+                st.success(f"{row['Pistas_Libres']} pistas disponibles")
 # 2. El bucle donde se muestran los datos (Debe llamar a 'Precio')
 for _, row in competencia.iterrows():
     st.write(f"**{row['Centro']}**")
