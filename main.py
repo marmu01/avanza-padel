@@ -154,12 +154,12 @@ for _, row in competencia.iterrows():
     competencia = pd.DataFrame({
         'Centro': ['Avanza Pádel', 'Club Alcalá B', 'Centro Entrenúcleos'],
         'Pistas Libres (Hoy)': [2, 0, 5],
-        'Precio Medio (€)': [24, 28, 22],
+        'Precio (€)': [24, 28, 22],
         'Rating': [4.8, 4.2, 4.5]
     })  
     for _, row in competencia.iterrows():
         st.write(f"**{row['Centro']}**")
-        st.caption(f"Rating: {row['Rating']} ⭐ | Precio: {row['Precio Medio']}€")
+        st.caption(f"Rating: {row['Rating']} ⭐ | Precio: {row['Precio']}€")
         if row['Pistas Libres (Hoy)'] == 0:
             st.error("Lleno Total (Oportunidad perdida)")
         else:
