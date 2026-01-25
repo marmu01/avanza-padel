@@ -107,13 +107,10 @@ import numpy as np
 # 6. MÓDULO DE INTELIGENCIA DE MERCADO (PLAYTOMIC)
 st.markdown("---")
 st.header("🕵️ Inteligencia de Mercado & Playtomic")
-
 col_left, col_right = st.columns([2, 1])
-
 with col_left:
     st.subheader("Ocupación por Franja Horaria (Media Semanal)")
     st.info("💡 **Ayuda al Gestor:** Los picos de 18:00 a 22:00 están saturados. El reto es el 'Yield Management': desplazar demanda a las 10:00 - 13:00 mediante bonos de escuela o tarifas dinámicas.")
-    
     # Simulación de datos de ocupación Playtomic
     horas = [f"{h:02d}:00" for h in range(8, 24)]
     ocupacion = [20, 35, 45, 40, 30, 25, 20, 35, 85, 95, 100, 95, 80, 60, 40, 20]
@@ -123,7 +120,6 @@ with col_left:
                          color_discrete_sequence=['#CCFF00'], template="plotly_dark")
     fig_hourly.update_layout(yaxis_range=[0, 100])
     st.plotly_chart(fig_hourly, use_container_width=True)
-
 with col_right:
     st.subheader("Radar de Competencia")
     st.info("Oportunidades vs. Clubes vecinos")
@@ -140,7 +136,6 @@ for _, row in competencia.iterrows():
     st.write(f"**{row['Centro']}**")
     # USAMOS 'Precio' aquí para que coincida con la definición de arriba
     st.caption(f"Rating: {row['Rating']} ⭐ | Precio: {row['Precio']}€") 
-    
     if row['Pistas_Libres'] == 0:
         st.error("Lleno Total (Oportunidad)")
     else:
@@ -150,8 +145,7 @@ for _, row in competencia.iterrows():
         'Pistas Libres (Hoy)': [2, 0, 5],
         'Precio Medio (€)': [24, 28, 22],
         'Rating': [4.8, 4.2, 4.5]
-    })
-    
+    })  
     for _, row in competencia.iterrows():
         st.write(f"**{row['Centro']}**")
         st.caption(f"Rating: {row['Rating']} ⭐ | Precio: {row['Precio Medio']}€")
@@ -159,7 +153,6 @@ for _, row in competencia.iterrows():
             st.error("Lleno Total (Oportunidad perdida)")
         else:
             st.success(f"{row['Pistas Libres (Hoy)']} pistas disponibles")
-
 # 7. VISIÓN DE OPORTUNIDADES
 with st.expander("🔍 Ver Análisis de Oportunidades 'Last Minute'"):
     st.write("""
